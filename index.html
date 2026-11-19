@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Game Roadmap 2027 — VNGGames</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=League+Gothic&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EFEFEF; --surface:#FFFFFF; --band:#F6F6F6; --ink:#161616; --muted:#5C5C5C; --line:#D9D9D9;
+  --orange:#F05A22; --orange-deep:#D2501E; --on-orange:#FFFFFF;
+  --off:#2EF0A0; --off-ink:#062B1C; --onl:#9CCBFF; --onl-ink:#0B2545; --mix:#FF9B1E; --mix-ink:#2A1300;
+  --scrim:rgba(20,20,20,.35);
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121212; --surface:#1C1C1C; --band:#222222; --ink:#F3F3F3; --muted:#A8A8A8; --line:#343434;
+    --orange:#F05A22; --orange-deep:#FF7A44; --scrim:rgba(0,0,0,.55); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121212; --surface:#1C1C1C; --band:#222222; --ink:#F3F3F3; --muted:#A8A8A8; --line:#343434;
+  --orange:#F05A22; --orange-deep:#FF7A44; --scrim:rgba(0,0,0,.55); color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 'Inter Tight',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;letter-spacing:.01em}
+h1,h2,h3{margin:0;font-weight:400}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.page{max-width:1600px;margin:0 auto;padding:24px 20px 48px}
+
+/* Hero: thẻ dạng "folder tab" theo shape DNA của brand */
+.hero{position:relative;background:var(--surface);padding:44px 32px 28px;margin-top:6px;
+  clip-path:polygon(0 18px,58% 18px,calc(58% + 18px) 0,100% 0,100% 100%,0 100%);border-radius:0 0 18px 18px}
+.brand{font:600 15px 'Inter Tight',sans-serif;color:var(--orange)}
+.hero h1{font-family:'League Gothic','Inter Tight',sans-serif;font-size:clamp(56px,9vw,112px);line-height:.92;color:var(--orange);margin-top:6px;letter-spacing:.005em}
+.hero p{max-width:62ch;margin:14px 0 0;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.chip{display:flex;align-items:center;gap:10px;padding:8px 14px 8px 8px;border-radius:12px;border:1.5px solid var(--line);background:var(--band);cursor:pointer;text-align:left}
+.chip .sw{width:30px;height:30px;border-radius:8px;flex:none;display:flex;align-items:center;justify-content:center;font:400 20px 'League Gothic',sans-serif}
+.chip b{display:block;font-weight:600;font-size:14px}
+.chip small{display:block;color:var(--muted);font-size:12px}
+.chip.on{border-color:var(--ink)}
+.chip:hover{border-color:var(--muted)}
+
+/* Board */
+.board-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin:34px 2px 10px;flex-wrap:wrap}
+.board-head h2{font-family:'League Gothic',sans-serif;font-size:40px;line-height:1}
+.board-head p{margin:0;color:var(--muted);font-size:13px}
+.scroller{overflow-x:auto;background:var(--surface);border-radius:18px;padding:14px 14px 18px 0;cursor:grab;scrollbar-width:thin}
+.scroller.drag{cursor:grabbing;user-select:none}
+.grid{--gcol:200px;--tcol:118px;--mcol:128px;display:grid;column-gap:6px;row-gap:5px;width:max-content;position:relative}
+.grid.qview{width:100%;min-width:calc(var(--gcol) + var(--tcol) + 3*226px)}
+.q{grid-row:1;height:38px;background:var(--orange);color:var(--on-orange);display:flex;align-items:flex-end;gap:8px;padding:0 12px 6px;
+  clip-path:polygon(0 9px,100% 0,100% 100%,0 100%);border-radius:0 0 6px 6px}
+.q b{font:400 24px/1 'League Gothic',sans-serif}
+.q span{font-size:12px;opacity:.92}
+.m{grid-row:2;text-align:center;color:var(--muted);font-size:12.5px;font-weight:500;padding:2px 0 4px}
+.corner{grid-row:1/3;grid-column:1/3;position:sticky;left:0;z-index:3;background:var(--surface)}
+.band{background:var(--band);border-radius:8px;min-height:34px}
+.tlabel{grid-column:2;position:sticky;left:var(--gcol);z-index:2;background:var(--surface);display:flex;align-items:center;gap:7px;padding:0 8px 0 4px;font-size:12px;font-weight:600;color:var(--muted)}
+.tlabel i{width:12px;height:12px;border-radius:4px;flex:none}
+.tlabel .short{display:none}
+.bar .cont{display:block;font-style:normal;font-size:11px;font-weight:600;opacity:.75;margin-top:3px}
+.qf{display:flex;gap:6px;flex-wrap:wrap}
+.qchip{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 14px;cursor:pointer;font:400 20px/1 'League Gothic',sans-serif;letter-spacing:.02em;min-width:56px}
+.qchip:hover{border-color:var(--muted)}
+.qchip.on{background:var(--orange);border-color:var(--orange);color:var(--on-orange)}
+.glabel{grid-column:1;position:sticky;left:0;z-index:2;background:var(--surface);padding:0 10px 0 16px;display:flex;align-items:stretch}
+.glabel button{flex:1;display:flex;flex-direction:column;justify-content:center;gap:2px;text-align:left;border:0;background:var(--band);border-radius:10px;padding:8px 12px;cursor:pointer;border-left:4px solid var(--orange)}
+.glabel .gs{font-size:11.5px;font-weight:600;color:var(--orange-deep)}
+.glabel .gn{font:400 24px/1 'League Gothic',sans-serif}
+.glabel .gp{font-size:11.5px;color:var(--muted);line-height:1.3}
+.gsep{height:8px}
+
+.bar{position:relative;z-index:1;border:0;text-align:left;cursor:pointer;padding:11px 10px 7px;min-height:54px;line-height:1.3;
+  clip-path:polygon(0 7px,100% 0,100% 100%,0 100%);border-radius:0 0 8px 8px;transition:opacity .15s}
+.bar b{display:block;font-weight:600;font-size:13.5px}
+.bar span{display:block;font-size:12px;opacity:.85;margin-top:2px}
+.bar.off{background:var(--off);color:var(--off-ink)}
+.bar.onl{background:var(--onl);color:var(--onl-ink)}
+.bar.mix{background:var(--mix);color:var(--mix-ink)}
+.bar.unk{background:transparent;color:var(--ink);clip-path:none;border:1.5px dashed var(--muted);border-radius:8px}
+.bar.unk.off{border-color:var(--off-ink)}
+.bar.tbu-time{background:repeating-linear-gradient(135deg,var(--off) 0 10px,color-mix(in srgb,var(--off) 70%,var(--surface)) 10px 20px)}
+.bar.dim{opacity:.14}
+.bar.sel{box-shadow:inset 0 0 0 3px var(--ink)}
+.bar .flag{position:absolute;right:6px;bottom:5px;font-size:11px;font-weight:700;opacity:.75}
+.none{grid-column:2/14;display:flex;align-items:center;padding:0 16px;min-height:62px;color:var(--muted);font-size:13px;border:1.5px dashed var(--line);border-radius:10px;position:relative;z-index:1}
+
+/* Esports cluster */
+.cluster{border-top:2px solid var(--orange);margin-top:6px;padding-top:6px}
+.cluster button{position:sticky;left:16px;display:flex;align-items:baseline;gap:12px;border:0;background:none;cursor:pointer;padding:2px 0 0 16px;text-align:left}
+.cluster .cn{font:400 30px/1 'League Gothic',sans-serif;color:var(--orange)}
+.cluster .cs{font-size:12.5px;color:var(--muted)}
+.glabel.sub{background:linear-gradient(var(--orange),var(--orange)) 24px 0/2px 100% no-repeat,var(--surface);padding-left:34px}
+.glabel.sub button{border-left-color:var(--muted)}
+
+/* Notes */
+.notes{margin-top:28px;background:var(--surface);border-radius:18px;padding:22px 24px}
+.notes h2{font-family:'League Gothic',sans-serif;font-size:32px;line-height:1;margin-bottom:10px}
+.notes ul{margin:0;padding-left:20px;max-width:90ch}
+.notes li{margin:6px 0}
+.notes .src{color:var(--muted);font-size:13px;margin-top:14px}
+
+/* Drawer */
+.scrim{position:fixed;inset:0;background:var(--scrim);opacity:0;pointer-events:none;transition:opacity .2s;z-index:20}
+.scrim.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--surface);z-index:21;transform:translateX(102%);transition:transform .25s ease;
+  display:flex;flex-direction:column;padding:calc(18px + env(safe-area-inset-top,0px)) 22px calc(18px + env(safe-area-inset-bottom,0px));box-shadow:-12px 0 30px rgba(0,0,0,.18)}
+.drawer.open{transform:none}
+.drawer .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.drawer .kind{display:inline-block;margin-top:2px;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:600}
+.drawer h3{font:400 38px/1 'League Gothic',sans-serif;margin-top:8px}
+.drawer .game{color:var(--muted);font-size:13px;margin-top:4px}
+.drawer .x{border:0;background:var(--band);width:40px;height:40px;border-radius:12px;font-size:20px;cursor:pointer;flex:none}
+.drawer dl{margin:16px 0 0;overflow:auto;display:grid;grid-template-columns:132px 1fr;gap:10px 14px;align-content:start}
+.drawer dt{color:var(--muted);font-size:13px}
+.drawer dd{margin:0;font-size:14px}
+.tbu{display:inline-block;padding:0 8px;border-radius:6px;background:var(--band);color:var(--muted);font-weight:600;font-size:12.5px}
+.drawer .warn{margin-top:14px;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--mix) 22%,var(--surface));font-size:13px}
+@media (max-width:720px){
+  .page{padding:16px 12px 40px}
+  .hero{padding:38px 18px 20px}
+  .grid{--gcol:124px;--tcol:58px;--mcol:118px}
+  .tlabel .full{display:none}
+  .tlabel .short{display:inline}
+  .grid.qview{min-width:calc(var(--gcol) + var(--tcol) + 3*170px)}
+  .glabel{padding-left:8px}
+  .glabel .gn{font-size:20px}
+  .drawer{top:auto;width:100%;height:min(82vh,640px);border-radius:18px 18px 0 0;transform:translateY(102%)}
+  .drawer dl{grid-template-columns:110px 1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="hero">
+    <div class="brand">VNGGames, CTS &amp; Partnership</div>
+    <h1>Game Roadmap 2027</h1>
+    <p>Kế hoạch hoạt động các sự kiện/mùa giải của các game trong năm 2027.</p>
+    <div class="legend" id="legend"></div>
+  </header>
+
+  <div class="board-head">
+    <div><h2 id="boardTitle">Lịch 12 tháng</h2><p id="boardHint"></p></div>
+    <div class="qf" id="qf" role="group" aria-label="Lọc theo quý"></div>
+  </div>
+  <div class="scroller" id="scroller"><div class="grid" id="grid"></div></div>
+
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle" aria-hidden="true">
+  <div class="top">
+    <div><span class="kind" id="dKind"></span><h3 id="dTitle"></h3><div class="game" id="dGame"></div></div>
+    <button class="x" id="dClose" type="button" aria-label="Đóng chi tiết">×</button>
+  </div>
+  <dl id="dList"></dl>
+  <div class="warn" id="dWarn" hidden></div>
+</aside>
+
+<script>
+const TYPES={
+  off:{label:'Offline',hint:'Sự kiện tại chỗ',bg:'var(--off)',ink:'var(--off-ink)'},
+  onl:{label:'Online',hint:'Social, livestream, in-game',bg:'var(--onl)',ink:'var(--onl-ink)'},
+  mix:{label:'Online + Offline',hint:'Kết hợp hai hình thức',bg:'var(--mix)',ink:'var(--mix-ink)'},
+  unk:{label:'Chưa rõ hình thức',hint:'Đang chờ thông tin',bg:'transparent',ink:'var(--ink)'},
+};
+const GS1_ON='Social content, livestream, minigame, KOL/KOC, in-game activities, push notification, PR, community activation, CRM';
+const GS1_ON2='Social content, livestream, minigame, in-game activities, push notification, PR, CRM';
+const ZSM_BRAND='Gói Diamond, Gold, Silver: logo trên áo đấu và website, social và PR, overlay, TVC livestream, booth onsite. Đã hợp tác: realme (Asian Cup 2026)';
+const ZSM_KPI='KPI chung cả năm: 100M+ impression, 30M+ video view, 20K+ PCU trận chung kết';
+const GST_BRAND='Đề xuất chung cho Ghost Story: F&B phong cách Trung Hoa (Haidilao, Manwah, Tian Long, Shuyi, Mixue, Maycha), trang sức PNJ, túi HAPAS';
+const ESP_BRAND='Gói phát sóng (broadcasting), gói truyền thông online, gói offline activation (đồng hành, NTT Vàng, NTT Kim Cương). Gói OTT độc quyền tham khảo 2026: LMHT $500K, TFT $250K, PUBGM $250K';
+const I=(s,e,t,n,d,x={})=>({s,e,t,n,d,...x});
+
+const GAMES=[
+ {id:'gs1',gs:'GS1',name:'VLTK, Yulgang, Kiếm Thế',products:'VLTKEVO, Yulgang, Kiếm Thế Origin, VLTK2, VLTKM, VLTK1M, VLTK2.0',sub:'Nhập vai kiếm hiệp (MMORPG)',genre:'Nhập vai kiếm hiệp (MMORPG)',items:[
+  I(2,2,'mix','VLTKEVO ra mắt','Launching game',{goal:'User acquisition, revenue, branding, community building',area:'Khác',on:GS1_ON,off:'Fan meeting, showcase, community gathering, booth, khác',ig:'Có'}),
+  I(3,3,'mix','Yulgang ra mắt','Launching game',{goal:'User acquisition, revenue, branding, community building',area:'Khác',on:GS1_ON,off:'Fan meeting, showcase, community gathering, booth, khác',ig:'Có'}),
+  I(4,4,'mix','KTO sinh nhật 4 tuổi','Hà Nội, 200 người',{goal:'Engagement, branding, community building',area:'HN',qty:'200',on:GS1_ON2,off:'Community gathering, booth, showcase',ig:'Có'}),
+  I(6,6,'mix','KTO mini offline VIP','VIP private, 70–100 người',{goal:'Engagement, revenue, branding, community building',area:'Khác',qty:'70–100',on:GS1_ON2,off:'Community gathering, showcase',ig:'Có'}),
+  I(9,9,'mix','VLTK2 sinh nhật 20 năm','1.000+ người',{goal:'Engagement, branding, community building',area:'Khác',qty:'1.000+',on:GS1_ON2,off:'Community gathering, booth, showcase',ig:'Có'}),
+  I(10,10,'mix','KTO mini offline VIP','VIP private, 70–100 người',{goal:'Engagement, revenue, branding, community building',area:'Khác',qty:'70–100',on:GS1_ON2,off:'Community gathering, showcase',ig:'Có'}),
+  I(10,10,'mix','VLTKM giải đấu x offline','Thường niên, 200+ người',{goal:'Engagement, revenue, branding, community building',area:'Khác',qty:'200+',on:GS1_ON2,off:'Community gathering, booth, showcase',ig:'Có'}),
+  I(11,11,'mix','VLTK1M giải đấu x offline','Thường niên, 200+ người',{goal:'Engagement, revenue, branding, community building',area:'Khác',qty:'200+',on:GS1_ON2,off:'Community gathering, booth, showcase',ig:'Có'}),
+  I(12,12,'mix','VLTK2.0 giải đấu x offline','Thường niên, 200+ người',{goal:'Engagement, revenue, branding, community building',area:'Khác',qty:'200+',on:GS1_ON2,off:'Community gathering, booth, showcase',ig:'Có'}),
+ ]},
+ {id:'zsm',gs:'GS2',name:'ZingSpeed Mobile',sub:'Đua xe, esports',genre:'Đua xe, esports',info:'MAU 500–700K, 25M+ lượt tải, 800K người theo dõi social. TA 13–24 tuổi (80%), 65% nam, 35% nữ.',items:[
+  I(3,4,'onl','Speed Community Series','Giải cộng đồng mở màn',{goal:'Community, esports',on:'Livestream, social',brand:ZSM_BRAND,kpi:ZSM_KPI,form:'Online (livestream)'}),
+  I(3,4,'onl','Đường Đua Cực Tốc mùa Hè','Giải VĐQG cá nhân',{goal:'Esports',on:'Livestream overlay, TVC, caster mention, social, PR',brand:ZSM_BRAND,kpi:ZSM_KPI}),
+  I(4,4,'off','ZSM tại GameVerse 2027','Sự kiện offline',{goal:'Branding, community',off:'Booth trải nghiệm, sampling, POSM, LED',brand:ZSM_BRAND}),
+  I(7,8,'onl','Asian Cup 2027','4 đại diện Việt Nam',{goal:'Esports quốc tế',on:'Livestream overlay, TVC, caster mention, social, PR',brand:ZSM_BRAND,kpi:ZSM_KPI}),
+  I(9,10,'onl','Z-League mùa Thu','Giải clan cấp quốc gia',{goal:'Esports, community',on:'Livestream, social, KOL đồng sáng tạo',brand:ZSM_BRAND,kpi:ZSM_KPI}),
+  I(11,12,'onl','Đường Đua Cực Tốc mùa Đông','Giải VĐQG cá nhân',{goal:'Esports',on:'Livestream overlay, TVC, caster mention, social, PR',brand:ZSM_BRAND,kpi:ZSM_KPI}),
+  I(12,12,'off','Sinh nhật 9 năm','Sự kiện offline',{goal:'Branding, community',off:'Booth trải nghiệm, sampling, POSM, LED',brand:ZSM_BRAND,warn:'Proposal đặt cuối năm, chưa ghi tháng cụ thể.'}),
+ ]},
+ {id:'pubgm',gs:'GS3',name:'PUBG Mobile',sub:'Bắn súng sinh tồn (Battle Royale)',genre:'Bắn súng sinh tồn (Battle Royale)',items:[
+  I(1,2,'onl','Tết: Mũ Ba Du Xuân','Series Tết, ingame và social',{goal:'Tăng DAU dịp Tết',on:'Series nội dung Tết, hoạt động ingame và social'}),
+  I(3,4,'off','PMPL Spring','TP.HCM, ~2.000 người',{goal:'Đẩy mạnh esports tại TP.HCM',area:'TP.HCM',qty:'~2.000'}),
+  I(5,6,'onl','Sinh nhật 9 tuổi','MV cùng celebrity',{goal:'Chuỗi hoạt động online, ra mắt MV sinh nhật cùng celebrity'}),
+  I(4,4,'off','Gameverse','SECC, TP.HCM',{goal:'Sự kiện game offline lớn nhất tại SECC',area:'SECC, TP.HCM'}),
+  I(6,7,'mix','Summer Update','Collab IP anime mùa hè',{goal:'Collab IP anime mùa hè, high-paying monetization, kèm chuỗi hoạt động online và offline',ig:'Có (update ingame)'}),
+  I(8,9,'off','Back to school','Booth tại trường học',{goal:'Branding và booth tại các điểm trường'}),
+  I(9,10,'off','PMPL Fall','Hà Nội, ~2.000 người',{goal:'Đẩy mạnh esports trong cộng đồng',area:'Hà Nội',qty:'~2.000',warn:'Theo file marketing PUBG Mobile. Lịch phát sóng Esports là file riêng, ghi PMPL Fall 4/8–29/8.'}),
+  I(11,12,'onl','SEA Games','Đồng hành đội tuyển',{goal:'Nội dung online đồng hành đội tuyển PUBG Mobile tại SEA Games',warn:'Lịch dự kiến.'}),
+  I(11,12,'off','Frost Fest','Festival cho creator',{goal:'Festival offline hype cộng đồng content creator'}),
+ ],note:'Deck ghi mốc tháng là đề xuất tạm, KPI đang để trống.'},
+ {id:'val',gs:'GS3',name:'VALORANT',sub:'Bắn súng chiến thuật (Tactical FPS)',genre:'Bắn súng chiến thuật (Tactical FPS)',items:[
+  I(1,1,'mix','Achilles','HCM, 4.000 người',{goal:'Community building, branding',area:'HCM',qty:'4.000 người',kpi:'Traffic 4.000 người',brand:'FnB, gaming gear (ưu tiên 2), cinema. Transportation: voucher di chuyển tới sự kiện, in-app visibility',off:'Community gathering, booth',ig:'Không'}),
+  I(4,5,'onl','Sinh nhật','Collab item, KOL',{goal:'Branding, community building',brand:'Creative approach: bánh sinh nhật, cafe, fashion',on:'Social content, collab item, KOL/KOC',ig:'Không'}),
+  I(7,7,'mix','CIC grand final','800–1.000 người/ngày',{goal:'Esports',qty:'800–1.000 người/ngày',brand:'Tech, gaming gear, transportation, FnB',on:'Social content',off:'Booth',ig:'Không',when:'Cuối tháng 7'}),
+  I(7,9,'mix','B2S retailers','Livestream, in-store POSM',{goal:'User acquisition, branding',area:'HN, HCM, khác',brand:'Brand tech, gaming gear hoặc retailer, laptop',on:'Livestream, social content',off:'In-store POSM',ig:'Không'}),
+  I(8,9,'onl','B2S collab','Social, livestream',{goal:'User acquisition, branding',area:'HN, HCM, khác',brand:'Văn phòng phẩm, giày, fashion',on:'Social content, livestream',off:'Booth',ig:'Không'}),
+  I(9,9,'off','B2S campus tour','5 điểm, 40K reach',{goal:'User acquisition, branding',area:'HN, HCM, khác',qty:'Số 2026: 5 điểm dừng, TB 800 người/ngày/điểm, peak 1.500, hơn 40K on-ground reach',brand:'FnB (xe kem, xe nước tiếp sức sinh viên), fashion, gaming gear',on:'Social content, livestream',off:'Booth',ig:'Không'}),
+  I(1,12,'off','VALORANT Station','Hệ thống VAL cyber, always on',{goal:'Duy trì điểm chạm offline xuyên suốt năm',area:'Hệ thống cyber VALORANT',off:'Hệ thống VAL cyber',when:'Always on, tháng 1–12'}),
+  I(10,10,'unk','Champions 27','Đang chờ thông tin',{ig:'Không',warn:'Sheet ghi TBU.'}),
+  I(12,12,'unk','Giải đấu nữ','Đang chờ thông tin',{warn:'Sheet ghi TBU.'}),
+ ]},
+ {id:'gst',gs:'GSDR',name:'Ghost Story',sub:'Nhập vai (MMORPG)',genre:'Nhập vai (MMORPG)',info:'30M+ MAU tại Đông Nam Á, Việt Nam là thị trường chủ lực. TA 65% là 18–34 tuổi đã đi làm, nữ chiếm 55–60%, chi khoảng 5 triệu/tháng cho giải trí và F&B, thích văn hóa Trung Hoa, kiếm hiệp.',items:[
+  I(1,3,'onl','Tết Thiện Nữ','Social, in-game, minigame',{goal:'Community building, revenue',on:'Social content, in-game activities, minigame, CRM',brand:GST_BRAND}),
+  I(4,8,'mix','Sinh nhật 10 năm','HN, HCM, fan meeting',{goal:'Engagement, branding, community building',area:'HN, HCM',on:'Livestream, minigame, KOL/KOC, in-game activities, push notification, PR, community activation',off:'Community gathering, booth, fan meeting',brand:GST_BRAND}),
+  I(9,11,'onl','Big Update','Social, in-game',{goal:'Engagement, community building',on:'Social content, in-game activities',brand:GST_BRAND}),
+ ]},
+ {id:'ptg',gs:'GS9',name:'Play Together',sub:'Mô phỏng xã hội (Social casual)',genre:'Mô phỏng xã hội (Social casual)',items:[
+  I(3,12,'off','Chuỗi offline 20 tỉnh thành','500 người/tỉnh, tại GO!',{goal:'Engagement, community building',area:'20 tỉnh thành',qty:'500/tỉnh thành',on:'Social content',off:'Booth, community gathering, tournament',ig:'Có',brand:'Đối tác đồng hành, quà tặng, đối tác truyền thông',warn:'Đã có đối tác địa điểm GO!, cần tìm đối tác đồng hành, quà tặng và truyền thông.'}),
+  I(5,5,'off','Sinh nhật PTG x F&B','HN, HCM',{goal:'Engagement, branding',area:'HN, HCM',on:'Social content',off:'Community gathering',ig:'Không',brand:'F&B: Haidilao, Jollibee'}),
+  I(6,6,'onl','Camp Hè & Hội hè play 2027','Mass, đa kênh online',{goal:'User acquisition, engagement, branding',area:'Khác',qty:'Mass',on:'Social content, livestream, minigame, KOL/KOC, in-game activities, push notification, PR, community activation, CRM',ig:'Có'}),
+  I(7,7,'off','Camp Hội hè offline','6 tỉnh thành, tournament',{goal:'Community building, engagement',area:'HN, HCM, khác',qty:'6 tỉnh thành lớn',off:'Tournament, booth, community gathering, showcase, fan meeting',ig:'Có',brand:'Đối tác đồng hành offline, tài trợ quà tặng, đồng hành truyền thông'}),
+  I(8,8,'onl','Back to school','Livestream cộng đồng',{goal:'User acquisition, engagement, branding',area:'HN, HCM',on:'Livestream tương tác cộng đồng',ig:'Có'}),
+  I(9,9,'off','Back to school offline','Kết nối học sinh',{goal:'User acquisition, engagement, branding',area:'HN, HCM',on:'CRM',off:'Khác',ig:'Không',brand:'Đối tác chuỗi, tổ chức, tài trợ cuộc thi học sinh',warn:'Open plan, đang tìm đối tác kết nối học sinh.'}),
+  I(10,10,'onl','Halloween','Social content',{goal:'Engagement',area:'Khác',on:'Social content',ig:'Không'}),
+  I(11,11,'onl','11/11 Livestream sale','Livestream bán hàng',{goal:'Revenue',area:'Khác',on:'Livestream',ig:'Không'}),
+  I(12,12,'onl','Giáng sinh','Livestream cộng đồng',{goal:'Engagement',on:'Livestream tương tác cộng đồng',ig:'Có'}),
+ ]},
+ {id:'cfl',gs:'GS9',name:'Crossfire: Legends',sub:'Bắn súng góc nhìn thứ nhất (FPS)',genre:'Bắn súng góc nhìn thứ nhất (FPS)',items:[
+  I(1,1,'onl','Phim Tết','TVC, phía Bắc',{goal:'User acquisition, engagement, branding',area:'HN, khác',on:'KOL/KOC, social content, TVC, landing page',ig:'Không'}),
+  I(1,1,'off','Big Offline Hà Nội','200 người, viewing party',{goal:'Community building',area:'HN',qty:'200',off:'Viewing party, fan meeting, community gathering, showcase, ăn uống giao lưu'}),
+  I(2,3,'onl','Cúp tỉnh thành, Cúp 4 miền','Vòng loại',{goal:'Esports',area:'Khác',on:'Livestream, social content'}),
+  I(3,12,'off','Chuỗi offline & mini tournament','34/34 tỉnh thành',{goal:'Community building, esports',area:'34/34 tỉnh thành',on:'Social content',off:'Tournament, community gathering',ig:'Không'}),
+  I(7,7,'off','Big Event offline','HN, 800 người, ca nhạc',{goal:'Branding, engagement, user acquisition',area:'HN',qty:'800',on:'Social content',off:'Fan meeting, showcase, viewing party, booth, community gathering, ca nhạc'}),
+  I(8,8,'onl','Cúp tỉnh thành, Cúp 4 miền','Giai đoạn 2',{goal:'Esports',area:'Khác',on:'Livestream, social content'}),
+  I(10,10,'onl','Cúp vô địch quốc gia','Vòng loại',{goal:'Esports',area:'Khác',on:'Social content, livestream'}),
+  I(11,11,'off','Cúp VĐQG chung kết','Tournament offline',{goal:'Esports',area:'Khác',off:'Tournament'}),
+  I(12,12,'onl','Sinh nhật CFL','Social, KOL/KOC',{goal:'Branding, user acquisition',area:'Khác',on:'Social content, KOL/KOC'}),
+ ]},
+ {id:'cos',gs:'GSSEA',name:'Cookie Run',sub:'Casual, hành động',genre:'Casual, hành động',items:[
+  I(1,2,'mix','Tết CookieRun 2027','Minigame, giftcode, meetup',{goal:'Community engagement, retention, brand awareness',area:'Việt Nam, ưu tiên HCM, HN',on:'Social minigame, giftcode, community challenge, KOL/KOC content, UGC',off:'Community meetup, mini tournament (nếu có đối tác)',ig:'Chưa xác nhận, cân nhắc branded reward hoặc giftcode tùy Dev duyệt',form:'Online + Offline (đề xuất). Tháng 2 ưu tiên online'}),
+  I(4,4,'mix','OvenSmash 1st Anniversary','Meetup, showmatch, booth',{goal:'Brand awareness, community engagement, retention',area:'HCM, HN tùy đối tác',on:'Anniversary campaign, UGC, social minigame, KOL/KOC livestream, giftcode',off:'Anniversary meetup, showmatch, mini tournament, brand booth',ig:'Có thể collab quà, giftcode, cần Dev xác nhận',form:'Online + Offline (đề xuất)'}),
+  I(4,4,'mix','CookieRun x GameVerse 2027','Booth trải nghiệm',{goal:'Brand awareness, new user acquisition, community engagement',area:'Theo BTC',on:'Event teaser, livestream, social recap, KOL/KOC',off:'Experience booth, community showmatch, co-branded activation',ig:'TBD, chưa xác nhận tham gia',form:'Offline + online amplification'}),
+  I(6,8,'mix','Summer Community Series','HSSV, campus, gaming café',{goal:'Community engagement, new user acquisition, retention, advocacy',area:'HCM, HN, nhóm HSSV',on:'Summer challenge, guild recruitment, tournament content, UGC, livestream, social minigame',off:'Community tournament, campus và gaming café activation, showmatch, chung kết',ig:'Giftcode, merch tài trợ theo phê duyệt',when:'Kick-off tháng 6, cao điểm tháng 7, chung kết tháng 8',form:'Online + Offline (đề xuất)'}),
+  I(11,12,'mix','Year-end Festive Season','Giftcode, meetup cuối năm',{goal:'Retention, community engagement, brand awareness',area:'Việt Nam, HCM, HN tùy đối tác',on:'Year-end challenge, giftcode, minigame, KOL/KOC, UGC, livestream',off:'Community meetup, partner activation, holiday gathering, co-branded giveaway',ig:'TBD, cần Dev duyệt in-game asset',form:'Online ưu tiên + Offline tùy đối tác'}),
+ ]},
+ {id:'esp-lol',cluster:'esp',gs:'Esports',name:'LMHT',sub:'MOBA',genre:'MOBA',items:[
+  I(1,2,'onl','VCS Split 1','15/1–14/2',{goal:'Phát sóng giải quốc nội',brand:ESP_BRAND,form:'Online (phát sóng)'}),
+  I(2,3,'onl','LCP Split 1','19/2–14/3',{goal:'Phát sóng giải khu vực',brand:ESP_BRAND,form:'Online (phát sóng)'}),
+  I(3,3,'onl','First Stand','LMHT quốc tế',{goal:'Phát sóng giải quốc tế',brand:ESP_BRAND,form:'Online (phát sóng)',warn:'Tháng ước lượng.'}),
+  I(4,5,'onl','VCS Split 2','16/4–16/5',{goal:'Phát sóng giải quốc nội',brand:ESP_BRAND,form:'Online (phát sóng)'}),
+  I(5,6,'onl','LCP Split 2','kết thúc 6/6',{goal:'Phát sóng giải khu vực',brand:ESP_BRAND,form:'Online (phát sóng)'}),
+  I(6,7,'onl','MSI','LMHT quốc tế',{goal:'Phát sóng giải quốc tế',brand:ESP_BRAND,form:'Online (phát sóng)',warn:'Tháng ước lượng.'}),
+  I(8,8,'onl','VCS Split 3','31/7–29/8',{goal:'Phát sóng giải quốc nội',brand:ESP_BRAND,form:'Online (phát sóng)'}),
+  I(9,9,'onl','LCP Split 3','13–26/9',{goal:'Phát sóng giải khu vực',brand:ESP_BRAND,form:'Online (phát sóng)'}),
+  I(10,11,'onl','Worlds','LMHT quốc tế',{goal:'Phát sóng giải quốc tế',brand:ESP_BRAND,form:'Online (phát sóng)',warn:'Tháng ước lượng.'}),
+ ]},
+ {id:'esp-tft',cluster:'esp',gs:'Esports',name:'TFT',sub:'Chiến thuật auto chess',genre:'Chiến thuật auto chess',items:[
+  I(1,3,'onl','TFT VĐQG Set 19','Chung kết 26–28/3',{goal:'Giải quốc nội, có nhánh Pro, nhánh Đơn Nữ, nhánh Sinh viên (UEC)',brand:ESP_BRAND,form:'Online (phát sóng)'}),
+  I(4,4,'onl',"Tactician's Crown",'TFT quốc tế, 9–11/4',{goal:'Phát sóng giải quốc tế',brand:ESP_BRAND,form:'Online (phát sóng)'}),
+  I(5,7,'onl','TFT VĐQG Set 20','Lịch ước lượng',{goal:'Giải quốc nội',brand:ESP_BRAND,form:'Online (phát sóng)',warn:'Tháng ước lượng.'}),
+  I(9,11,'onl','TFT VĐQG Set 21','Lịch ước lượng',{goal:'Giải quốc nội',brand:ESP_BRAND,form:'Online (phát sóng)',warn:'Tháng ước lượng.'}),
+ ]},
+ {id:'esp-pubgm',cluster:'esp',gs:'Esports',name:'PUBG Mobile',sub:'Bắn súng sinh tồn (Battle Royale)',genre:'Bắn súng sinh tồn (Battle Royale)',items:[
+  I(3,4,'onl','PMPL VN Spring','17/3–11/4',{goal:'Giải quốc nội',brand:ESP_BRAND,form:'Online (phát sóng)'}),
+  I(4,5,'onl','SEA Finals','30/4–2/5',{goal:'Giải khu vực',brand:ESP_BRAND,form:'Online (phát sóng)'}),
+  I(5,6,'onl','PMGO S1','PUBGM quốc tế',{goal:'Giải quốc tế',brand:ESP_BRAND,form:'Online (phát sóng)',warn:'Tháng ước lượng.'}),
+  I(7,7,'onl','PMWC','PUBGM quốc tế',{goal:'Giải quốc tế',brand:ESP_BRAND,form:'Online (phát sóng)',warn:'Tháng ước lượng.'}),
+  I(8,8,'onl','PMPL VN Fall','4/8–29/8',{goal:'Giải quốc nội',brand:ESP_BRAND,form:'Online (phát sóng)',warn:'Theo lịch phát sóng Esports. File marketing PUBG Mobile là file riêng, ghi tháng 9–10.'}),
+  I(9,9,'onl','SEA Finals','10–11/9',{goal:'Giải khu vực',brand:ESP_BRAND,form:'Online (phát sóng)'}),
+  I(10,10,'onl','PMGO S2','PUBGM quốc tế',{goal:'Giải quốc tế',brand:ESP_BRAND,form:'Online (phát sóng)',warn:'Tháng ước lượng.'}),
+  I(11,11,'onl','PMGC','PUBGM quốc tế',{goal:'Giải quốc tế',brand:ESP_BRAND,form:'Online (phát sóng)',warn:'Tháng ước lượng.'}),
+ ]},
+ {id:'vng',gs:'VNGGames',name:'VNGGames',sub:'Sự kiện toàn công ty',genre:'Sự kiện toàn công ty',items:[
+  I(4,4,'off','Gameverse','Tháng 4 hằng năm',{goal:'Branding, community',off:'Sự kiện offline'}),
+  I(10,10,'off','Sự kiện cùng UBND TP','Tháng 10 (TBU)',{goal:'Sự kiện lớn liên kết Ủy ban Thành phố',off:'Sự kiện offline',when:'Tháng 10 (TBU)',tbuTime:1,warn:'Tạm đặt tháng 10, chờ xác nhận.'}),
+ ]},
+ {id:'lvu',gs:'VNGGames',name:'Level Up',sub:'Website chăm sóc VIP user',genre:'Website chăm sóc VIP user',info:'21 triệu thành viên. Level Up là điểm chạm tiếp cận, VNGGames Club là nền tảng quản lý hành trình hội viên VIP. Kênh: LevelUp, Club, Zalo OA, Facebook VNGGames, in-game. Lịch theo file VNGGames Club Campaign Planning Q4/2026 – Tết 2027, ngày cụ thể là đề xuất.',items:[
+  I(1,2,'onl','Educate Club','Giới thiệu Club, tier và quyền lợi',{goal:'Tăng nhận biết và hiểu đúng Club, khác Level Up thế nào',area:'Online',kpi:'Reach, CTR, awareness baseline',brand:'Không cần offer, dùng logo hệ sinh thái đối tác (optional)',on:'LevelUp, Club, Zalo OA, Facebook',when:'Launch 07/12/2026, always-on đến 15/02/2027'}),
+  I(1,1,'onl','Welcome Package','Quà chào mừng khi kích hoạt Club',{goal:'Kích hoạt, xác thực, trải nghiệm quyền lợi đầu tiên',area:'Online',kpi:'Login → verify, claim Welcome Package',brand:'Đang chạy: ZaloPay 5K. Mở rộng (optional): Data/Top-up (Viettel, ZaloPay, MobiFone), Café (Highlands, Starbucks, Phúc Long), F&B (KFC, ShopeeFood, GrabFood)',on:'LevelUp, Club, Zalo OA',when:'07/12/2026 – 10/01/2027'}),
+  I(1,12,'onl','Tier-up Reward','Quà khi lên hạng, always-on',{goal:'Ghi nhận nâng hạng, đẩy quyền lợi theo tier',area:'Online',kpi:'Claim, redeem theo tier',brand:'Đang chạy: ZaloPay 5K, The Pizza Company. Cần request cho hạng Kim Cương, Huyền Thoại: Premium Dining (Haidilao, Marou, Ănăn Saigon), Hotel & Staycation (Vinpearl, Meliá, InterContinental, Agoda, Sheraton), Entertainment (Riot Games, CGV, ticketing). Mở rộng: Premium Lifestyle (Samsung, Sony, Apple), VIP Utility (lounge, FPT Shop). Dưới 20 triệu/VIP player',on:'Club, Zalo OA, in-game',when:'Always-on từ 07/12/2026, gia hạn offer theo quý'}),
+  I(1,1,'onl','Monthly Lucky Wheel','Vòng quay may mắn hằng tháng',{goal:'Tạo lý do quay lại Club mỗi tháng',area:'Online',kpi:'Lượt quay, claim, redeem',brand:'Đang chạy: ZaloPay 5K, The Pizza Company. Cần request: Events/Esports (Riot Games, VNGGames, Games On), Cinema/Streaming (YouTube, CGV, Netflix). Mở rộng: Transportation (Grab, Xanh SM, Be), Data/Top-up',on:'LevelUp, Club, Zalo OA',when:'07/12/2026 – 31/01/2027'}),
+  I(1,1,'onl','Club Mall','Tích điểm xuyên game, đổi quà',{goal:'Khám phá Club Mall, tích và đổi Club Points',area:'Online',kpi:'Mall visitors, đổi quà, redeem',brand:'Đang chạy: ZaloPay 5K, The Pizza Company. Cần request: Events/Esports, Cinema/Streaming, Dining/F&B (KFC, ShopeeFood, GrabFood). Mở rộng: Transportation',on:'Club, LevelUp, Zalo OA, Facebook',when:'07/12/2026 – 17/01/2027, sau đó chuyển thành Chợ Tết'}),
+  I(1,1,'onl','Đua Top: Bảng Vàng VIP','Leaderboard VIP, Top 100 nhận quà',{goal:'Tăng tương tác, thúc đẩy spending cuối năm của premium player',area:'Online',kpi:'Viewer leaderboard, spending hợp lệ, quà cấp',brand:'Đang chạy: ZaloPay 5K, The Pizza Company theo 5 nhóm Top 1–100. Mở rộng: Premium Dining cho Top 1–10, vé VIP access cho Top 1',on:'In-game, LevelUp, Club, Zalo OA, Facebook',when:'Mùa 14/12/2026 – 03/01/2027, trao quà trước 10/01/2027'}),
+  I(1,1,'onl','Lookback','Nhìn lại hành trình chơi game cá nhân hóa',{goal:'Ghi nhận, kết nối cảm xúc, mở đầu chuỗi cuối năm',area:'Online',kpi:'Visit, hoàn thành xem, chia sẻ social',brand:'Cần request: voucher, quà tri ân (gợi ý Café hoặc Data/Top-up), hiệu lực hết tháng 1/2027',on:'LevelUp, Club, Zalo OA, Facebook, kênh game',when:'Live 21/12/2026 – 10/01/2027, recap 11–17/01/2027'}),
+  I(1,1,'onl','Quay lại: Mở chuỗi thành tích','Kéo người chơi inactive quay lại',{goal:'Reactivation tệp inactive',area:'Online',kpi:'User quay lại, claim, redeem',brand:'Đang chạy: ZaloPay 7K',on:'Zalo OA, LevelUp, Club',when:'04/01 – 31/01/2027'}),
+  I(1,2,'onl','Lì Xì Kết Nối','Mở lì xì, mời bạn nhận quà',{goal:'Referral, kéo thêm hội viên dịp Tết',area:'Online',kpi:'Participants, mở lì xì, referral hợp lệ, claim, redeem',brand:'Cần request (hiệu lực đến 15/02/2027): ZaloPay (voucher trong lì xì), Café (Highlands, Starbucks, Phúc Long), Data/Top-up (Viettel, ZaloPay, MobiFone)',on:'LevelUp, Club, Zalo OA, Facebook, in-game',when:'Teaser 04/01, live 11/01 – 15/02/2027 (Mùng 10)'}),
+  I(1,2,'onl','Chợ Tết Club Mall','Đổi Club Points lấy quà Tết',{goal:'Tích và đổi Club Points dịp Tết',area:'Online',kpi:'Mall visitors, Club Points đã đổi, redeem',brand:'Cần request (hiệu lực đến 15/02/2027): Dining/F&B, Cinema/Streaming, Premium Lifestyle (Samsung, Sony, Apple). Mở rộng: Hotel & Staycation',on:'LevelUp, Club, Zalo OA, Facebook',when:'Teaser 11/01, live 18/01 – 15/02/2027'}),
+  I(1,2,'onl','Điểm Danh Xuân','Điểm danh mỗi ngày nhận quà Tết',{goal:'Tương tác hằng ngày dịp Tết',area:'Online',kpi:'Participants, lượt nhận/ngày, hoàn thành mốc',brand:'Cần request (hiệu lực đến 15/02/2027): Dining/F&B (KFC, ShopeeFood, GrabFood), Data/Top-up, Transportation (Grab, Xanh SM, Be)',on:'LevelUp, Club, Zalo OA, Facebook',when:'Teaser 18/01, live 25/01 – 15/02/2027'}),
+  I(1,3,'onl','Premium VIP PNS (S+ Upgrade)','Nâng cấp quyền lợi premium cho VIP',{goal:'Nâng cấp đặc quyền cho hội viên hạng cao',area:'Online',brand:'Premium Dining, Travel, Exclusive Entertainment',when:'Q1/2027, sourcing từ tháng 11/2026'}),
+  I(4,6,'onl','Mass PNS Monthly Reward','Quà hằng tháng cho hội viên Mass',{goal:'Quà định kỳ hằng tháng cho tệp Mass',area:'Online',brand:'Data/Top-up, F&B, Cinema, Mobility',when:'Launch Q2/2027, sourcing tháng 1–3/2027'}),
+ ]},
+];
+
+const CLUSTERS={esp:{name:'Esports',sub:'LMHT, TFT, PUBG Mobile, theo lịch phát sóng giải quốc nội và quốc tế 2027',info:'Các tháng ghi "ước lượng" là đọc theo vị trí trên lịch phát sóng, chưa có ngày cụ thể.'}};
+const NOTES=[
+ 'Gameverse thống nhất tháng 4 cho tất cả game.',
+ 'Cụm Esports được tách thành ba hàng LMHT, TFT, PUBG Mobile, cùng nằm dưới tiêu đề Esports. Cụm Esports theo lịch phát sóng Esports, hàng PUBG Mobile theo file marketing PUBG Mobile. Hai file độc lập nên giữ nguyên cả hai, ví dụ PMPL Fall: Esports ghi 4/8–29/8, marketing ghi tháng 9–10.',
+ 'ZingSpeed Mobile theo file proposal 2027.',
+ 'Sự kiện VNGGames cùng Ủy ban Thành phố tạm đặt tháng 10, chờ xác nhận.',
+ 'VALORANT: Champions 27 và giải đấu nữ đang ghi TBU, chưa rõ hình thức.',
+ 'Esports: một số giải quốc tế và TFT VĐQG Set 20, Set 21 ước lượng tháng theo vị trí trên lịch phát sóng.',
+];
+
+const grid=document.getElementById('grid'), legend=document.getElementById('legend');
+const T='TBU';
+let bars=[], lock=null, lastFocus=null;
+const el=(tag,cls,html,css)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;if(css)e.style.cssText=css;return e;};
+const put=(e)=>{grid.appendChild(e);return e;};
+
+// ---------- Quý, dòng theo hình thức, render ----------
+const QUARTERS=[{k:'all',label:'Cả năm',m:[1,12]},{k:'q1',label:'Q1',m:[1,3]},{k:'q2',label:'Q2',m:[4,6]},{k:'q3',label:'Q3',m:[7,9]},{k:'q4',label:'Q4',m:[10,12]}];
+const QH=[['Q1','Tháng 1–3',1,3],['Q2','Tháng 4–6',4,6],['Q3','Tháng 7–9',7,9],['Q4','Tháng 10–12',10,12]];
+const LINE_LABEL={onl:['Online','On'],off:['Offline','Off'],mix:['Online + Offline','On+Off'],unk:['Chưa rõ','?']};
+let range=[1,12], qKey='all';
+function pack(items){const lanes=[];items.slice().sort((a,b)=>a.s-b.s||b.e-a.e).forEach(it=>{let L=lanes.find(l=>l[l.length-1].e<it.s);if(!L){L=[];lanes.push(L);}L.push(it);});return lanes;}
+function when(it){ return it.when || ('Tháng '+it.s+(it.e>it.s?'–'+it.e:'')); }
+const inRange=it=>it.e>=range[0]&&it.s<=range[1];
+const apply=t=>bars.forEach(b=>b.classList.toggle('dim',!!t&&b.dataset.t!==t));
+
+function render(){
+  grid.innerHTML=''; bars=[];
+  const [m0,m1]=range, nm=m1-m0+1, full=nm===12, last=nm+3;
+  grid.classList.toggle('qview',!full);
+  grid.style.gridTemplateColumns=`var(--gcol) var(--tcol) repeat(${nm},${full?'var(--mcol)':'minmax(min(220px,30vw),1fr)'})`;
+  const col=m=>m-m0+3;
+  put(el('div','corner','',''));
+  QH.forEach(([q,r,a,b])=>{ if(b<m0||a>m1) return; put(el('div','q',`<b>${q}</b><span>${r}</span>`,`grid-column:${col(Math.max(a,m0))}/${col(Math.min(b,m1))+1}`)); });
+  for(let m=m0;m<=m1;m++) put(el('div','m','Tháng '+m,`grid-column:${col(m)}`));
+  let row=3, curCluster=null, shown=0;
+  GAMES.forEach((g,gi)=>{
+    const its=g.items.filter(inRange);
+    if(!full && !its.length) return;
+    shown++;
+    if(g.cluster && g.cluster!==curCluster){
+      const C=CLUSTERS[g.cluster], h=put(el('div','cluster','',`grid-row:${row};grid-column:1/${last}`));
+      const hb=el('button','',`<span class="cn">${C.name}</span><span class="cs">${C.sub}</span>`); hb.type='button'; hb.onclick=()=>openCluster(g.cluster); h.appendChild(hb); row++;
+    }
+    curCluster=g.cluster||null;
+    const types=['onl','off','mix'].concat(its.some(i=>i.t==='unk')?['unk']:[]);
+    const lines=types.map(t=>({t,lanes:pack(its.filter(i=>i.t===t))}));
+    const total=lines.reduce((a,l)=>a+Math.max(1,l.lanes.length),0);
+    const lab=put(el('div','glabel'+(g.cluster?' sub':''),'',`grid-row:${row}/${row+total}`));
+    const lb=el('button','',`<span class="gs">${g.gs}</span><span class="gn">${g.name}</span><span class="gp">${g.genre}</span>`);
+    lb.type='button'; lb.setAttribute('aria-label',`${g.name}, ${g.genre}. Xem thông tin game`); lb.onclick=()=>openGame(g); lab.appendChild(lb);
+    let r=row;
+    lines.forEach(({t,lanes})=>{
+      const n=Math.max(1,lanes.length), ty=TYPES[t];
+      put(el('div','tlabel '+t,`<i style="background:${ty.bg};${t==='unk'?'border:1.5px dashed var(--muted)':''}"></i><span class="full">${LINE_LABEL[t][0]}</span><span class="short">${LINE_LABEL[t][1]}</span>`,`grid-row:${r}/${r+n}`));
+      put(el('div','band','',`grid-row:${r}/${r+n};grid-column:3/${last}`));
+      lanes.forEach((lane,li)=>lane.forEach(it=>{
+        const s=Math.max(it.s,m0), e=Math.min(it.e,m1);
+        const cont=(it.s<m0?`<em class="cont">Từ tháng ${it.s}</em>`:'')+(it.e>m1?`<em class="cont">Đến tháng ${it.e}</em>`:'');
+        const b=el('button',`bar ${t}${it.tbuTime?' tbu-time':''}`,`<b>${it.n}</b><span>${it.d}</span>${cont}`,`grid-row:${r+li};grid-column:${col(s)}/${col(e)+1}`);
+        b.type='button'; b.dataset.t=t; b.setAttribute('aria-label',`${it.n}, ${g.name}, ${ty.label}, ${when(it)}`);
+        b.onclick=()=>{ if(moved) return; openItem(g,it,b); };
+        put(b); bars.push(b);
+      }));
+      r+=n;
+    });
+    row=r; put(el('div','gsep','',`grid-row:${row};grid-column:1/${last}`)); row++;
+  });
+  if(!shown) put(el('div','none','Quý này chưa có hoạt động nào.',`grid-row:3;grid-column:3/${last}`));
+  // legend counts theo phạm vi đang xem
+  const counts={}; GAMES.forEach(g=>g.items.filter(inRange).forEach(it=>counts[it.t]=(counts[it.t]||0)+1));
+  legend.innerHTML='';
+  if(lock && !counts[lock]) lock=null;
+  Object.entries(TYPES).forEach(([k,v])=>{
+    if(!counts[k]) return;
+    const c=el('button','chip'+(lock===k?' on':''),`<span class="sw" style="background:${v.bg};color:${v.ink};${k==='unk'?'border:1.5px dashed var(--muted)':''}">${counts[k]}</span><span><b>${v.label}</b><small>${v.hint}</small></span>`);
+    c.type='button'; c.setAttribute('aria-pressed',String(lock===k));
+    c.onmouseenter=()=>apply(k); c.onmouseleave=()=>apply(lock); c.onfocus=()=>apply(k); c.onblur=()=>apply(lock);
+    c.onclick=()=>{ lock=lock===k?null:k; [...legend.children].forEach(x=>{const on=x===c&&lock===k;x.classList.toggle('on',on);x.setAttribute('aria-pressed',String(on));}); apply(lock); };
+    legend.appendChild(c);
+  });
+  apply(lock);
+  document.getElementById('boardTitle').textContent=full?'Lịch 12 tháng':`Quý ${qKey.slice(1)}, tháng ${m0}–${m1}`;
+  document.getElementById('boardHint').textContent=full
+    ?'Mỗi game chia 3 dòng theo hình thức. Bấm vào khối để xem chi tiết, kéo ngang để xem các tháng sau.'
+    :`Đang xem ${shown} game có hoạt động trong quý. Khối kéo dài sang quý khác có ghi chú tháng bắt đầu hoặc kết thúc.`;
+}
+const qf=document.getElementById('qf');
+QUARTERS.forEach(q=>{
+  const b=el('button','qchip'+(q.k==='all'?' on':''),q.label); b.type='button'; b.setAttribute('aria-pressed',String(q.k==='all'));
+  b.onclick=()=>{ qKey=q.k; range=q.m; [...qf.children].forEach(x=>{const on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',String(on));}); document.getElementById('scroller').scrollLeft=0; render(); };
+  qf.appendChild(b);
+});
+render();
+
+// notes
+
+
+// drawer
+const drawer=document.getElementById('drawer'), scrim=document.getElementById('scrim');
+const val=v=>v?v:`<span class="tbu">${T}</span>`;
+function show(kindHTML,title,gameLine,rows,warn){
+  document.getElementById('dKind').outerHTML=kindHTML;
+  document.getElementById('dTitle').textContent=title;
+  document.getElementById('dGame').textContent=gameLine;
+  document.getElementById('dList').innerHTML=rows.map(([k,v])=>`<dt>${k}</dt><dd>${val(v)}</dd>`).join('');
+  const w=document.getElementById('dWarn'); w.hidden=!warn; w.textContent=warn||'';
+  lastFocus=document.activeElement;
+  drawer.classList.add('open'); scrim.classList.add('open'); drawer.setAttribute('aria-hidden','false');
+  document.getElementById('dClose').focus();
+}
+function openItem(g,it,b){
+  bars.forEach(x=>x.classList.remove('sel')); b.classList.add('sel');
+  const ty=TYPES[it.t];
+  show(`<span class="kind" id="dKind" style="background:${ty.bg};color:${ty.ink};${it.t==='unk'?'border:1.5px dashed var(--muted)':''}">${ty.label}</span>`,it.n,`${g.name} (${g.gs})`,[
+    ['Thời gian',when(it)],['Hình thức',it.form||(it.t==='unk'?'':ty.label)],['Mục tiêu',it.goal],['Khu vực',it.area],['Số lượng tham gia',it.qty],
+    ['KPI/traffic',it.kpi],['Brand mong muốn',it.brand],['Hoạt động online',it.on],['Hoạt động offline',it.off],['Hợp tác in-game',it.ig]],'');
+}
+function openGame(g){
+  bars.forEach(x=>x.classList.remove('sel'));
+  const c={};g.items.forEach(it=>c[it.t]=(c[it.t]||0)+1);
+  show(`<span class="kind" id="dKind" style="background:var(--orange);color:var(--on-orange)">${g.gs}</span>`,g.name,g.genre,[
+    ['Thể loại',g.genre],...(g.products?[['Sản phẩm',g.products]]:[]),['Số hoạt động',g.items.length?String(g.items.length):''],
+    ...Object.entries(c).map(([k,v])=>[TYPES[k].label,String(v)]),
+    ['Thông tin game',g.info]],g.items.length?'':'Chưa có roadmap cho game này.');
+}
+function openCluster(key){
+  const C=CLUSTERS[key], gs=GAMES.filter(g=>g.cluster===key);
+  bars.forEach(x=>x.classList.remove('sel'));
+  show(`<span class="kind" id="dKind" style="background:var(--orange);color:var(--on-orange)">Cụm</span>`,C.name,C.sub,[
+    ...gs.map(g=>[g.name,g.items.length+' giải']),['Gói tài trợ',ESP_BRAND],['Ghi chú',C.info]],'');
+}
+function closeD(){ drawer.classList.remove('open'); scrim.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); bars.forEach(x=>x.classList.remove('sel')); if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
+document.getElementById('dClose').onclick=closeD; scrim.onclick=closeD;
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&drawer.classList.contains('open')) closeD(); });
+
+// drag to scroll
+const sc=document.getElementById('scroller'); let down=false,sx=0,sl=0,moved=false;
+sc.addEventListener('pointerdown',e=>{ if(e.pointerType!=='mouse') return; down=true; moved=false; sx=e.clientX; sl=sc.scrollLeft; });
+window.addEventListener('pointermove',e=>{ if(!down) return; const dx=e.clientX-sx; if(Math.abs(dx)>5){ moved=true; sc.classList.add('drag'); } if(moved) sc.scrollLeft=sl-dx; });
+window.addEventListener('pointerup',()=>{ down=false; sc.classList.remove('drag'); setTimeout(()=>moved=false,0); });
+</script>
+</body>
+</html>
